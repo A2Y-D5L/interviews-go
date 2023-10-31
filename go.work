@@ -1,0 +1,7 @@
+go 1.21.3
+
+use (
+	./advanced/account_balances/challenge
+	./advanced/account_balances/solution/good_answer
+	./advanced/account_balances/solution/great_answer
+)

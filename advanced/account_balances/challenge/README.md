@@ -1,4 +1,4 @@
-# Account Balances Question
+# Account Balances Challenge
 
 There are a number of issues in the code snippet below.
 
