@@ -1,2 +1,2 @@
-# interviews-pub
-Interview questions for software developers
+# interviews-go
+Interview questions for Golang developers
