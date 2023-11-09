@@ -47,7 +47,7 @@ wg.Wait() // Wait for all goroutines to complete.
 ```
 Using a `WaitGroup` ensures synchronization and that all goroutines complete their operations.
 
-#### Improved Error Handling:
+### Improved Error Handling:
 
 In `types.go`:
 ```go
