@@ -2,7 +2,7 @@
 
 The original code provided for the interview question contains several issues, especially regarding concurrent transactions and lack of error handling for account operations.
 
-### Problematic Code Snippets:
+### Problematic Code:
 
 #### Concurrency Issue:
 ```go
@@ -26,13 +26,10 @@ func (a *Account) Withdraw(i, amt int) {
 ```
 There's no check for insufficient funds during withdrawal, which might lead to negative balances.
 
-## Solution Overview
+## Solution
 
-To address the above problems and enhance the code, the solution splits the logic into separate modules: `types.go`, `transaction.go`, and `main.go`.
+### Handling Concurrency:
 
-### Solution Snippets:
-
-#### Handling Concurrency:
 In `main.go`:
 ```go
 var wg sync.WaitGroup
@@ -51,6 +48,7 @@ wg.Wait() // Wait for all goroutines to complete.
 Using a `WaitGroup` ensures synchronization and that all goroutines complete their operations.
 
 #### Improved Error Handling:
+
 In `types.go`:
 ```go
 func (a *Account) Debit(amount int) error {
@@ -63,5 +61,5 @@ func (a *Account) Debit(amount int) error {
 ```
 With this approach, withdrawals are checked for sufficient funds, and an error is returned if funds are insufficient.
 
-#### Modular Approach:
-Splitting the logic into different modules (`types.go` for data types, `transaction.go` for transaction logic, and `main.go` for the main execution) makes the codebase more readable, maintainable, and testable.
+### Modular Approach:
+Splitting the logic into different files (`types.go` for data types, `transaction.go` for transaction logic, and `main.go` for the main execution) makes the codebase more readable, maintainable, and testable.
