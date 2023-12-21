@@ -1,0 +1,3 @@
+package main
+
+// ... [customContext and other pipeline stage functions remain unchanged] ...
