@@ -75,3 +75,66 @@ func Test_getSumOfOdds(t *testing.T) {
 		})
 	}
 }
+
+func Test_concPipelines(t *testing.T) {
+	tests := []struct {
+		name string
+		ints [][]int
+		want int
+	}{
+		{
+			name: "single slice",
+			ints: [][]int{{1, 2, 3, 4}},
+			want: 4,
+		},
+		{
+			name: "multiple slices",
+			ints: [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}},
+			want: 25,
+		},
+		{
+			name: "empty slice",
+			ints: [][]int{{}},
+			want: 0,
+		},
+		{
+			name: "multiple empty slices",
+			ints: [][]int{{}, {}, {}},
+			want: 0,
+		},
+		{
+			name: "all even numbers",
+			ints: [][]int{{2, 4, 6}, {8, 10, 12}},
+			want: 0,
+		},
+		{
+			name: "negative numbers",
+			ints: [][]int{{-1, -3, -5}},
+			want: -9,
+		},
+		{
+			name: "mixed positive and negative numbers",
+			ints: [][]int{{1, -2, 3, -4}},
+			want: 4,
+		},
+		{
+			name: "large number of slices",
+			ints: func() [][]int {
+				var slices [][]int
+				for i := 0; i < 100; i++ {
+					slices = append(slices, []int{1, 2, 3, 4, 5})
+				}
+				return slices
+			}(),
+			want: 900,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := concPipelines(tt.ints...); got != tt.want {
+				t.Errorf("concPipelines() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

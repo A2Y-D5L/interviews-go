@@ -6,6 +6,7 @@ package main
 
 import (
 	"context"
+	"sync"
 )
 
 // filterOddNumbers returns a channel emitting only the odd numbers from the input slice.
@@ -66,4 +67,45 @@ func getSumOfOdds(ctx context.Context, ints []int) int {
 			return sum // Return the sum calculated so far.
 		}
 	}
+}
+
+// concPipelines returns the sum of odd integers from each slice in a variadic slice of []int.
+func concPipelines(ints ...[]int) int {
+	var wg sync.WaitGroup
+	ctx := context.Background()
+	results := make(chan int)
+
+	wg.Add(len(ints))
+
+	for _, is := range ints {
+		go func(ctx context.Context, ints []int) {
+			defer wg.Done()
+			pipeline := sumNumbers(ctx, filterOddNumbers(ctx, ints))
+			sum := 0
+			for {
+				select {
+				case val, ok := <-pipeline:
+					if !ok {
+						results <- sum
+						return
+					}
+					sum += val
+				case <-ctx.Done():
+					results <- sum // Return the sum calculated so far.
+					return
+				}
+			}
+		}(ctx, is)
+	}
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	totalSum := 0
+	for sum := range results {
+		totalSum += sum
+	}
+	return totalSum
 }
