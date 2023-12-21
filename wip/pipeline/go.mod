@@ -1,0 +1,3 @@
+module github.com/a2y-d5l/interviews-pub/wip/pipeline
+
+go 1.21.3
